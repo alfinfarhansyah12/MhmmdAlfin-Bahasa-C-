@@ -10,25 +10,25 @@
 #include <string.h>
 
 struct mahasiswa{
-	int nim; //menampung integer nim mahasiswa
+	int npm; //menampung integer npm mahasiswa
 	char nama[30]; //menampung karakter nama mahasiswa
 	struct mahasiswa *next, *prev; //menampung alamat data selanjutnya (next) dan sebelumnya (prev)
-}*head, *tail, *current;
+}*head, *DataAkhir, *current;
 //head => pointer yang menyimpan alamat data pertama
-//tail => pointer yang menyimpan alamat data terakhir
+//DataAkhir => pointer yang menyimpan alamat data terakhir
 //current => pointer yang digunakan sebagai temporary variabel
 
-void pushHead(int nim, char nama[]){
+void pushHead(int npm, char nama[]){
     //alokasi memory untuk data baru
 	current = (struct mahasiswa*)malloc(sizeof(struct mahasiswa));
-	current->nim = nim; //assign data ke dalam struct
+	current->npm = npm; //assign data ke dalam struct
 	strcpy(current->nama, nama); //copy nilai variabel parameter nama ke current->nama
 
 	//set penunjuk data lain yang menjadi NULL dulu
 	current->next = current->prev=NULL;
 
-	if(head == NULL){ //jika nilai head adalah null, maka set head = tail = current
-		head = tail = current; //set nilai head = tail = current
+	if(head == NULL){ //jika nilai head adalah null, maka set head = DataAkhir = current
+		head = DataAkhir = current; //set nilai head = DataAkhir = current
 	}
 	else{ //jika nilai head tidak null, maka
         head->prev = current;
@@ -37,39 +37,39 @@ void pushHead(int nim, char nama[]){
 	}
 }
 
-void pushTail(int nim, char nama[]){
+void pushDataAkhir(int npm, char nama[]){
 	current = (struct mahasiswa*)malloc(sizeof(struct mahasiswa)); //alokasi memory untuk data baru
-	current->nim = nim;//assign data ke dalam struct
+	current->npm = npm;//assign data ke dalam struct
 	strcpy(current->nama, nama); //copy nilai variabel parameter nama ke current->nama
 
 	//set penunjuk data yang lain menjadi NULL dulu
 	current->prev = current->next = NULL;
 
-	if(head == NULL){ //jika nilai head adalah null, maka set head = tail = current
-		head = tail = current; //set nilai head = tail = current
+	if(head == NULL){ //jika nilai head adalah null, maka set head = DataAkhir = current
+		head = DataAkhir = current; //set nilai head = DataAkhir = current
 	}
 	else{ //jika nilai head tidak null, maka
-        current->prev = tail;
-		tail->next = current; //set nilai tail->next = current
-		tail = current; //kemudian set nilai tail = current
+        current->prev = DataAkhir;
+		DataAkhir->next = current; //set nilai DataAkhir->next = current
+		DataAkhir = current; //kemudian set nilai DataAkhir = current
 	}
 }
 
-void PushMid(int nim, char nama[]){
+void PushMid(int npm, char nama[]){
 	if(head==NULL){ //cek apakah head NULL atau bukan, jika NULL
-		pushHead(nim,nama); //tambahkan data di depan
-	}else if(nim < head->nim){ //jika nim yang dimasukkan lebih kecil dari nim data ke head
-		pushHead(nim,nama); //tambahkan data di depan
-	}else if(nim > tail->nim){ //jika nim yang dimasukkan lebih kecil dari nim data ke tail
-		pushTail(nim,nama); //tambahkan data di belakang
+		pushHead(npm,nama); //tambahkan data di depan
+	}else if(npm < head->npm){ //jika npm yang dimasukkan lebih kecil dari npm data ke head
+		pushHead(npm,nama); //tambahkan data di depan
+	}else if(npm > DataAkhir->npm){ //jika npm yang dimasukkan lebih kecil dari npm data ke DataAkhir
+		pushDataAkhir(npm,nama); //tambahkan data di belakang
 	}else{ //jika kondisinya selain di atas
 		current = (struct mahasiswa*)malloc(sizeof (struct mahasiswa)); //buat blok data
-		current->nim = nim; //assign data ke dalam struct
+		current->npm = npm; //assign data ke dalam struct
         strcpy(current->nama, nama); //copy nilai variabel parameter nama ke current->nama
 		current->next = current->prev = NULL; //set penunjuk data sebelum/sesudahnya menjadi NULL dulu
 
 		struct mahasiswa *temp=head; //set temp sebagai head
-		while(temp!=NULL && temp->nim< current->nim){ //mencari posisi data akan dimasukkan
+		while(temp!=NULL && temp->npm< current->npm){ //mencari posisi data akan dimasukkan
 			temp=temp->next;
 		}
 		//set data penunjuk alamat-alamat data ke selanjutnya/sebelumnya
@@ -83,12 +83,12 @@ void PushMid(int nim, char nama[]){
 
 void popHead(){
 	if(head==NULL){ //jika head bernilai null
-		printf("No data\n"); //tampilkan info tidak ada data
-	}else if(head==tail){ //jika nilai head = tail
+		printf("Tidak dapat menemukan data user\n"); //tampilkan info tidak ada data
+	}else if(head==DataAkhir){ //jika nilai head = DataAkhir
         current=head; //set current sebagai head
-		head=tail=NULL; //set nilai head = tail = null
+		head=DataAkhir=NULL; //set nilai head = DataAkhir = null
 		free(current); //hapus nilai current (head)
-	}else{ //jika nilai head bukan null dan bukan tail
+	}else{ //jika nilai head bukan null dan bukan DataAkhir
         current=head; //set current sebagai head
 		head=head->next; //set nilai head menjadi data selanjutnya dari head
 		head->prev=NULL; //set head sebelumnya menjadi NULL
@@ -96,30 +96,30 @@ void popHead(){
 	}
 }
 
-void popTail(){
+void popDataAkhir(){
 	if(head==NULL){ //jika nilai head = null
-		printf("No data\n"); //tampilkan info tidak ada data
-	}else if(head==tail){ //jika nilai head = tail
-        current=tail; //set nilai current dengan tail
-		head=tail=NULL; //set nilai head = tail = null
+		printf("Tidak dapat menemukan data user\n"); //tampilkan info tidak ada data
+	}else if(head==DataAkhir){ //jika nilai head = DataAkhir
+        current=DataAkhir; //set nilai current dengan DataAkhir
+		head=DataAkhir=NULL; //set nilai head = DataAkhir = null
 		free(current); //hapus nilai current
-	}else{ //jika nilai head bukan null dan bukan tail
-		current=tail; //set nilai current menjadi tail
-		tail=tail->prev; //set nilai setelah next menjadi null/pointer next punya tail diset null
-		tail->next=NULL; //set nilai setelah next menjadi null/pointer next punya tail diset null
+	}else{ //jika nilai head bukan null dan bukan DataAkhir
+		current=DataAkhir; //set nilai current menjadi DataAkhir
+		DataAkhir=DataAkhir->prev; //set nilai setelah next menjadi null/pointer next punya DataAkhir diset null
+		DataAkhir->next=NULL; //set nilai setelah next menjadi null/pointer next punya DataAkhir diset null
 		free(current); //hapus nilai current
 	}
 }
 
-void popMid(int nim){
+void popMid(int npm){
 	int ketemu=0; //inisialisasi flag ketemu untuk ngecek data ada atau tidak
 	if(head==NULL){ //jika head bernilai NULL
-		printf("No Data\n"); //tampilkan info tidak ada data
+		printf("Tidak dapat menemukan data user\n"); //tampilkan info tidak ada data
 	}else{ //jika head tidak NULL
 		current=head; //set current dengan head
 		while(current!=NULL){ //mencari posisi data yang ada
 			//cek data,jika ditemukan, ganti flag dan hentikan looping
-			if(current->nim==nim){
+			if(current->npm==npm){
 				ketemu=1;
 				break;
 			}
@@ -129,15 +129,15 @@ void popMid(int nim){
 		if(ketemu==1){ //jika data ketemu
 			if(current==head){ //jika data yang ditemukan adalah Head
 				popHead(); //hapus head/data pertama
-			}else if(current==tail){ //jika data yang ditemukan adalah Tail
-				popTail(); //hapus tail/data terakhir
-			}else{ //jika data yang ditemukan bukan Head dan bukan Tail
+			}else if(current==DataAkhir){ //jika data yang ditemukan adalah DataAkhir
+				popDataAkhir(); //hapus DataAkhir/data terakhir
+			}else{ //jika data yang ditemukan bukan Head dan bukan DataAkhir
 				current->prev->next=current->next; //set current next
 				current->next->prev=current->prev; // set current prev
 				free(current); //hapus nilai current
 			}
 		}else{ //jika data tidak ketemu, tampilkan info data tidak ada
-			printf("Not Found\n");
+			printf("Tidak dapat menemukan data user\n");
 		}
 	}
 }
@@ -146,24 +146,30 @@ void print(){
 	current = head; //set current sebagai head
 	if(current!=NULL){
         while(current != NULL){ //looping selama current bukan null
-            printf("%s -> %d\n",current->nama,current->nim); //tampilkan nilai nama dan nim
+            printf("%s -> %d\n",current->nama,current->npm); //tampilkan nilai nama dan npm
             current = current->next; //set current menjadi nilai setelahnya
         }
 	} else{
-        printf("No Data\n");
+        printf("Tidak dapat menemukan data user\n");
 	}
 }
 
 void main(){
-	pushHead(111, "Alfin");
-	pushTail(222, "Bedul");
-	pushTail(333,"Joni");
-	pushTail(444,"Bunga");
-	pushHead(555, "David");
-	PushMid(666, "Budi");
+	printf("\n-----------------------------------------\n");
+	printf("	MUHAMMAD ALFIN FARHANSYAH\n");
+	printf("	50421907\n");
+	printf("	2IA25\n");
+	printf("Contoh Double List Linked Pemerograman C\n");
+	printf("\n-----------------------------------------\n");
+	pushHead(50421907, "Muhammad Alfin Farhansyah");
+	pushDataAkhir(5544555, "Rizaldi Komeng Kurniawan");
+	pushDataAkhir(5434313,"David Wilson AlekYonglek");
+	pushDataAkhir(5465434,"Bunga");
+	pushHead(3445544, "Supradi Neneng Markoneng");
+	PushMid(7654344, "Joni Siregar");
 	print();
 	printf("\n-----------------------------------------\n");
-	popMid(555);
+	popMid(6555565);
 	print();
 	getchar();
 }
